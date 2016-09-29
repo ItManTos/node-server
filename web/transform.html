@@ -1,0 +1,204 @@
+<html>
+<head>
+<meta charset="utf-8">
+    <meta name="keywords" content="transform for timestamp base64 urlencode">
+    <meta name="description" content="transform for timestamp base64 urlencode">
+    <title>Transform</title>
+	<link rel="icon" type="image/ico" href="./favicon.ico">
+<link rel="stylesheet" href="./css/bootstrap.min.css">
+<style>
+body { margin-top: 70px; }
+.navbar-brand {
+	background-image: url(img/logo_g.png);
+	background-repeat: no-repeat;
+	background-position: left center;
+	padding-left: 18px;
+}
+.navbar-brand:hover {
+	background-image: url(img/logo_w.png);
+}
+</style>
+<script type='text/javascript' src='./js/base64.js' ></script> 
+<script type='text/javascript' src='./js/jquery.js' ></script> 
+    <script src="./js/itman70s.menu.js"></script>
+<script>
+function encodeTS() {
+   document.getElementById("TSS1").value = new Date(document.getElementById("TSS2").value.replace(/\-/g, "/")) - 0;
+}
+
+function decodeTS() {
+   document.getElementById("TSS2").value = new Date(parseInt(document.getElementById("TSS1").value)).toLocaleString().replace(/[^\d\/\-\: \.]*/g, ""); 
+}
+
+function currentTS() {
+   document.getElementById("TSS1").value = new Date() - 0;
+   document.getElementById("TSS2").value = new Date().toLocaleString().replace(/[^\d\/\-\: \.]*/g, ""); 
+}
+
+function encodeUrl(full) {
+	var source = document.getElementById("UrlS1");
+    document.getElementById("UrlS2").value = full ? encodeURIComponent(source.value) : encodeURI(source.value);
+}
+
+function decodeUrl(full) {
+	var source = document.getElementById("UrlS2");
+    document.getElementById("UrlS1").value = full ? decodeURIComponent(source.value) : decodeURI(source.value);
+}
+
+function encodeUnicode() {
+	var source = document.getElementById("UCS1");
+    document.getElementById("UCS2").value = Unicode.stringify(source.value);
+}
+
+function decodeUnicode() {
+	var source = document.getElementById("UCS2");
+    document.getElementById("UCS1").value = Unicode.parse(source.value);
+}
+var Unicode = {
+    stringify: function (str) {
+ 
+        var res = [],
+            len = str.length;
+     
+        for (var i = 0; i < len; ++i) {
+            res[i] = ("00" + str.charCodeAt(i).toString(16)).slice(-4);
+        }
+     
+        return str ? "\\u" + res.join("\\u") : "";
+    },     
+    parse: function (str) {
+     
+        str = str.replace(/\\/g, "%");
+        return unescape(str);
+    }
+};
+function decodeBase64() {
+   var obj = document.getElementById("Base64S2");
+   document.getElementById("Base64S1").value = Base64.decode("" + obj.value);
+}
+function encodeBase64() {
+   var obj = document.getElementById("Base64S1");
+   document.getElementById("Base64S2").value = Base64.encode("" + obj.value);
+}
+</script>
+</head>
+
+<body class="col-md-12">
+<header class="navbar navbar-inverse navbar-fixed-top" role="banner">
+<div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+		<a class="navbar-brand" href="http://ItManTos.github.io/">ItManTos</a>
+    </div>
+    <nav id="bs-navbar" class="collapse navbar-collapse">
+	<ul class="nav navbar-nav">
+		<li><a href="index.html">Home</a></li>
+		<li><a href="https://github.com/ItManTos/tangrammy">Tangrammy</a></li>
+		<li><a href="richtext/index.html">Rich Text</a></li>
+		<li class="active"><a href="transform.html" title="transform for timestamp base64 urlencode">Transform</a></li>
+		<li><a href="about.html" title="To know ItManTos?">About</a></li>
+	</ul>
+	<a href="https://github.com/ItManTos"><img style="position: absolute; right: 0; border: 0;" src="img/forkme.png" title="Fork me on GitHub"></a>
+    </nav>
+</div>
+</header>
+<div class="container">
+<h1>时间戳转换</h1>
+
+<div class="row">
+  <div class="col-lg-7">
+    <div class="input-group">
+      <span class="input-group-btn">
+        <button class="btn btn-success" type="button" onclick="javascript:currentTS()">当前时间</button>
+      </span>
+      <input type="text" id="TSS1" class="form-control" placeholder="UNIX时间戳">
+      <span class="input-group-btn">
+        <button class="btn btn-primary" type="button" onclick="javascript:decodeTS()">　转日期》</button>
+      </span>
+      <input type="text" id="TSS2" class="form-control" placeholder="日期">
+      <span class="input-group-btn">
+        <button class="btn btn-info" type="button" onclick="javascript:encodeTS()">《转时间戳</button>
+      </span>
+    </div>
+  </div>
+</div>
+
+
+<hr>
+<h1>URL转码</h1>
+
+<div class="row">
+  <div class="col-lg-7">
+    <div class="input-group">
+      <input type="text" id="UrlS1" class="form-control" placeholder="原始url">
+      <span class="input-group-btn">
+        <a class="btn btn-primary" type="button" onclick="javascript:encodeUrl()" title='encodeURI'>转码</a>
+      </span>
+      <span class="input-group-btn">
+        <a class="btn btn-info" type="button" onclick="javascript:encodeUrl(true)" title='encodeURIComponent包含：包含：":"、"/"、";" 和 "?"'>完全转码</a>
+      </span>
+    </div>
+    <div class="input-group">
+      <input type="text" id="UrlS2" class="form-control" value="IT%E5%AE%A270s%20https%3A%2F%2FItManTos.github.io%2F" placeholder="转码后的url">
+      <span class="input-group-btn">
+        <a class="btn btn-primary" type="button" onclick="javascript:decodeUrl()" title='decodeURI'>解码</a>
+      </span>
+      <span class="input-group-btn">
+        <a class="btn btn-info" type="button" onclick="javascript:decodeUrl(true)" title='decodeURIComponent包含：":"、"/"、";" 和 "?"'>完全解码</a>
+      </span>
+    </div>
+  </div>
+</div>
+
+
+<hr>
+<h1>Unicode转码</h1>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="input-group">
+	  <textarea class="form-control" rows="10" id="UCS1" cols="80"" placeholder="要转成Unicode的数据"></textarea>
+      <span class="input-group-btn">
+        <input type="button" class="btn btn-primary" value="转成Unicode》" onclick="javascript:encodeUnicode()">
+		<br>
+		<input type="button" class="btn btn-info"  style="margin-top: 50px;" value="《Unicode解码" onclick="javascript:decodeUnicode()">
+      </span>
+	  <textarea class="form-control" rows="10" id="UCS2" cols="80"" placeholder="要查看Unicode的数据">\u0049\u0054\u5ba2\u0037\u0030\u0073\u0020\u0068\u0074\u0074\u0070\u0073\u003a\u002f\u002f\u0069\u0074\u006d\u0061\u006e\u0037\u0030\u0073\u002e\u0067\u0069\u0074\u0068\u0075\u0062\u002e\u0069\u006f\u002f</textarea>
+    </div>
+  </div>
+</div>
+
+<hr>
+<h1>Base64转码</h1>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="input-group">
+	  <textarea class="form-control" rows="10" id="Base64S1" cols="80"" placeholder="要加密的数据"></textarea>
+      <span class="input-group-btn">
+        <input type="button" class="btn btn-primary" value="Base64加密》" onclick="javascript:encodeBase64()">
+		<br>
+		<input type="button" class="btn btn-info"  style="margin-top: 50px;" value="《Base64解密" onclick="javascript:decodeBase64()">
+      </span>
+	  <textarea class="form-control" rows="10" id="Base64S2" cols="80"" placeholder="要解密的数据">SVTlrqI3MHMgaHR0cHM6Ly9pdG1hbjcwcy5naXRodWIuaW8v</textarea>
+    </div>
+  </div>
+</div>
+<br>
+
+</div>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-77708906-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>

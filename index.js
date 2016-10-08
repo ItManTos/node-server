@@ -19,7 +19,9 @@ app.use(express.static(root));
 
 var toFake = function (url, method){return url};
 try { toFake = require(fakejs).get; } catch(e){};
-function redirect(req, res) {
+function redirect(req, res, next) {
+	// 设置跨域访问，方便开发
+	res.header('Access-Control-Allow-Origin', '*');
 	var url = toFake(req.url, req.method);
 	console.log(req.method + ": " + req.url  + ' => ' + url);
 	if (url == req.url) {
@@ -27,8 +29,8 @@ function redirect(req, res) {
 	}
 	res.redirect(url);
 }
-app.get('*', redirect);
-app.post('*', redirect);
+
+app.all('*', redirect);
 
 
 var types = {

@@ -19,7 +19,15 @@ app.use(express.static(root));
 
 var toFake = function (url, method){return url};
 try { toFake = require(fakejs).get; } catch(e){};
+
 function redirect(req, res) {
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
+	res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
+
+	if (req.method == 'OPTIONS') {
+		res.send(200);
+	}
 	var url = toFake(req.url, req.method);
 	console.log(req.method + ": " + req.url  + ' => ' + url);
 	if (url == req.url) {
@@ -27,8 +35,7 @@ function redirect(req, res) {
 	}
 	res.redirect(url);
 }
-app.get('*', redirect);
-app.post('*', redirect);
+app.all('*', redirect);
 
 
 var types = {
@@ -101,6 +108,7 @@ app.use(log4js.connectLogger(log4js.getLogger('Z'), {level:'debug', format:':met
 var server = app.listen(port, function () {
   var host = server.address().address;
   console.log('Service started.\n' +
+'' + process.argv.join(" ") + '\n' +
 '*************************************************************************\n' +
 'Usage: node index [port] [web path] [fake js file path] \n' +
 'Sample[default]: ./cmd/node index 3000 ./web \n' +

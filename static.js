@@ -12,6 +12,7 @@ var server = app.listen(port, function () {
   console.log('Usage: node static [port] [web path]  \n' +
 'Sample[default]: ./cmd/node static 80 ./web \n' +
 'Service started.\n' +
+'' + process.argv.join(" ") + '\n' +
 '*************************************************************************\n' +
 'Server listening on port http://localhost:' + port + '\n' +
 '*************************************************************************');

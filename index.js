@@ -15,7 +15,16 @@ var log = true; // 是否输出控制台信息到logs目录下的文件里
   
   
 var app = express();
+root = path.normalize(root);
 app.use(express.static(root));
+console.log("Base file path: " + root);
+
+fakejs = path.normalize(fakejs);
+var tmp = path.dirname(fakejs);
+if (root != tmp) {
+	console.log("Additional path: " + tmp);
+	app.use(express.static(tmp));
+}
 
 var toFake = function (url, method){return url};
 try { toFake = require(fakejs).get; } catch(e){};
